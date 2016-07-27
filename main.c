@@ -5,16 +5,22 @@
 /*
 *main.c
 */
+volatile unsigned int i;
 void __low_level_init(void){
   WDTCTL = WDTPW + WDTHOLD;                 // Stop WDT
 }
 
 int main(void){
 
+	P1DIR |= 0x01;
+	for(;;){
+		P1OUT |= ~0x01
+		__delay(50000);
+	}
 
 //UBR00=0x1A; UBR10=0x00; UMCTL0=0x00;  uart0 1000000Hz 38461bps 
 //UBR01=0x1A; UBR11=0x00; UMCTL1=0x00;  uart1 1000000Hz 38461bps 
-
+/*
   P3SEL |= BIT3+BIT4;                       // P3.3,4 = USCI_A0 TXD/RXD
   UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
   UCA0CTL1 |= UCSSEL_2;                     // SMCLK
@@ -23,9 +29,9 @@ int main(void){
   UCA0MCTL |= UCBRS_1 + UCBRF_0;            // Modulation UCBRSx=1, UCBRFx=0
   UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
   UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
-
-  __bis_SR_register(LPM0_bits + GIE);       // Enter LPM0, interrupts enabled
-  __no_operation();                         // For debugger
+*/
+  //__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0, interrupts enabled
+  //__no_operation();                         // For debugger
 }
 
 // Echo back RXed character, confirm TX buffer is ready first
