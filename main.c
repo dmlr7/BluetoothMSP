@@ -1,11 +1,34 @@
-#include <msp430.h> 
-#include "driverlib/usci_a_uart.h"
-#include "driverlib/eusci_a_uart.h"
-
+#include <msp430.h>
+//#include "driverlib/usci_a_uart.h"
+//#include "driverlib/eusci_a_uart.h"
+/*
+ * Defining personal vars
+ */
+#define LED1            BIT0
+#define LED2            BIT7
+#define SWITHC          BIT1
+#define PDL1            P1DIR
+#define POL1            P1OUT
+#define PDL2            P4DIR
+#define POL2            P4OUT
+#define SWITCHP         BIT1
+/*
+ * Energia.h functions
+ */
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
+#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define radians(deg) ((deg)*DEG_TO_RAD)
+#define degrees(rad) ((rad)*RAD_TO_DEG)
+#define sq(x) ((x)*(x))
 /*
 *main.c
 */
 volatile unsigned int i;
+void configSwitch(int port,int pin){
+
+}
 void b1(void){
     P1DIR |= 0x01;
 	for(;;){
@@ -15,16 +38,16 @@ void b1(void){
 		    i--;
 		}while(i);
 	}
-    
+
 }
 void b2(){
     P1DIR |= BIT1;
-    
+
     P2REN |= BIT1;
     P2OUT |= BIT1;
     P2IES |= BIT1;  // P2.1 Hi/lo edge
     P2IFG |= BIT1;  // P2.1 zIFG cleared just in case
-    
+
 	for(;;){
 		P1OUT |= ~0x01;
 		i=50000;
@@ -41,8 +64,8 @@ int main(void){
 
 	b1();
 
-//UBR00=0x1A; UBR10=0x00; UMCTL0=0x00;  uart0 1000000Hz 38461bps 
-//UBR01=0x1A; UBR11=0x00; UMCTL1=0x00;  uart1 1000000Hz 38461bps 
+//UBR00=0x1A; UBR10=0x00; UMCTL0=0x00;  uart0 1000000Hz 38461bps
+//UBR01=0x1A; UBR11=0x00; UMCTL1=0x00;  uart1 1000000Hz 38461bps
 /*
   P3SEL |= BIT3+BIT4;                       // P3.3,4 = USCI_A0 TXD/RXD
   UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
@@ -67,9 +90,8 @@ void __attribute__ ((interrupt(PORT2_VECTOR)))PORT2_ISR (void)
 #error Compiler not supported!
 #endif
 {
-    P1OUT ^= ~BIT1;     // Toggle LED at P1.0
-    P2IFG &= ~BIT1; // P2.1 IFG cleared
-
+    P4OUT ^= ~BIT7;     // Toggle LED at P1.0
+    P2IFG &= ~BIT1;     // P2.1 IFG cleared
 }
 
 // Echo back RXed character, confirm TX buffer is ready first
